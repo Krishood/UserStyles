@@ -1,0 +1,70 @@
+/* ==UserStyle==
+
+@name         More Thumbnails per row
+@description  Adds more thumbnails per row on the home page, subscription page and channel videos section.
+@namespace    https://userstyles.world/user/Krishood
+@version      1.3.5
+@author       Krishood
+@license      MIT
+
+@homepageURL  https://github.com/Krishood/UserStyles
+@supportURL   https://github.com/Krishood/UserStyles/issues
+@updateURL    https://raw.github.com/Krishood/UserStyles/main/YouTube/More_Thumbnails_Per_Row.user.css
+
+@preprocessor stylus
+
+@var checkbox home                       'Homepage' 1
+@var range home_thumbsperrow             '└⎯⎯⎯⟶' [4, 1, 10, 1]
+@var checkbox subs                       'Subscriptions' 1
+@var range subs_thumbsperrow             '└⎯⎯⎯⟶' [4, 1, 10, 1]
+@var checkbox channel                    'Channel videos' 1
+@var range channel_thumbsperrow          '└⎯⎯⎯⟶' [4, 1, 10, 1]
+
+==/UserStyle== */
+
+@-moz-document domain("www.youtube.com") {
+    
+    if home {
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="home"] ytd-rich-grid-renderer {
+            --ytd-rich-grid-items-per-row: home_thumbsperrow !important;
+        }
+
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="home"] #contents>ytd-rich-grid-row,
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="home"] #contents>ytd-rich-grid-row>#contents {
+            display: contents !important;
+        }
+    }
+
+    if subs {
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="subscriptions"] ytd-rich-grid-renderer {
+            --ytd-rich-grid-items-per-row: subs_thumbsperrow !important;
+        }
+
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="subscriptions"] #contents>ytd-rich-grid-row,
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="subscriptions"] #contents>ytd-rich-grid-row>#contents {
+            display: contents !important;
+        }
+    }
+
+    if channel {
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] ytd-rich-grid-renderer {
+            --ytd-rich-grid-items-per-row: channel_thumbsperrow !important;
+        }
+
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] #contents>ytd-rich-grid-row,
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] #contents>ytd-rich-grid-row>#contents {
+            display: contents !important;
+        }
+
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] ytd-rich-item-renderer,
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] #header>.ytd-rich-grid-renderer {
+            margin-left: calc(var(--ytd-rich-grid-item-margin)/2.4);
+            margin-right: calc(var(--ytd-rich-grid-item-margin)/2.4);
+        }
+
+        ytd-browse.style-scope.ytd-page-manager[page-subtype="channels"] ytd-rich-grid-renderer {
+            margin-left: calc(var(--ytd-rich-grid-item-margin)/-2.4);
+            margin-right: calc(var(--ytd-rich-grid-item-margin)/-2.4);
+        }
+    }
+}
