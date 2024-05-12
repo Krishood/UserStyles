@@ -1,0 +1,391 @@
+/* ==UserStyle==
+
+@name         Full-page Cinema Mode
+@description  Expands the video player further while in Cinema mode
+@namespace    https://userstyles.world/user/Krishood
+@version      1.0
+@author       Krishood
+@license      MIT
+
+@homepageURL  https://github.com/Krishood/UserStyles
+@supportURL   https://github.com/Krishood/UserStyles/issues
+@updateURL    https://raw.github.com/Krishood/UserStyles/main/YouTube/Full-page_Cinema_Mode.user.css
+
+@preprocessor stylus
+
+@var checkbox searchbar                 "⦿ Search Bar" 1
+@var select sb_visibility               "└⟶ Visibility" ['always:Always','hover:Only on Hover*', 'webpage:When cursor is on webpage', 'hide:Hidden']
+@var checkbox sb_scrolling              "└⟶ Show while scrolling" 1
+
+@var checkbox b_transition              "⦿ Transition" 1
+@var select transitiontype              "└⟶ Transition Type" ['Slide*', 'Fade', 'Both:Slide + Fade']
+@var range transitionperiod             "└⟶ Transition Period" [0.25, 0, 1, 0.01, 's']
+
+@var checkbox scrollbarstyle            "⦿ Scrollbar Style" 1
+@var select watch_scrollbar "└⟶ Watch Page" {
+  "Broad": "auto",
+  "Thin": "thin",
+  "Hidden*": "none",
+}
+@var select chat_scrollbar "└⟶ Chat" {
+  "Broad": "auto",
+  "Thin*": "thin",
+  "Hidden": "none",
+}
+@var select scrolling_scrollbar "└⟶ While scrolling" {
+  "Broad": "auto",
+  "Thin*": "thin",
+  "Hidden": "none",
+}
+
+@var checkbox ytchat                   "⦿ Chat" 1
+@var checkbox topchat                   "└⟶ Expand to top" 1
+@var checkbox squarechat                "└⟶ Square Corners" 1
+
+@var checkbox extraconfig               "⦿ Extra settings if Chat enabled:" 0
+@var number c_chat_width                "└⟶  Chat width (px)" [402, 0, 7680, 1, 'px']
+@var number c_searchbar_width           "└⟶  Search Bar width (%)" [100, 0, 100, 0.1, 'vw']
+@var number c_vp_height                 "└⟶  Video Player Height (%)" [100, 0, 100, 0.1, 'vh']
+@var number c_vp_width                  "└⟶  Video Player width (%)" [100, 0, 200, 0.1, 'vw']
+
+@var color bgcolor                      "⦿ Video Player Background color" #000
+
+==/UserStyle== */
+
+@-moz-document url-prefix("https://www.youtube.com/watch") {
+    
+    /* Expand Video Player */
+    ytd-watch-flexy[theater]:not([fullscreen]) #full-bleed-container.ytd-watch-flexy {
+        max-height: 100vh;
+        height: 100vh;
+        background-color: bgcolor !important;
+    }
+    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #page-manager.ytd-app {
+        margin-top: 0px;
+    }
+
+    /* Search Bar */
+    if searchbar {
+        if b_transition {
+            if transitiontype=="Slide" {
+                @keyframes t_slide {
+                    from {
+                        --mastheadpos: -56px;
+                    }
+                    to {
+                        --mastheadpos: 0px;
+                    }
+                }
+            }
+
+            if transitiontype=="Fade" {
+                @keyframes t_fade {
+                    from {
+                        --mastheadopactiy: 0;
+                    }
+                    to {
+                        --mastheadopacity: 1;
+                    }
+                }
+            }
+
+            if transitiontype=="Both" {
+                @keyframes t_slidefade {
+                    from {
+                        --mastheadpos: -56px;
+                        --mastheadopactiy: 0;
+                    }
+                    to {
+                        --mastheadpos: 0px;
+                        --mastheadopacity: 1;
+                    }
+                }
+            }
+        }
+        else {
+            if sb_visibility=="hover" {
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                    opacity: 0;
+                }
+
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container:hover ytd-masthead {
+                    opacity: 1;
+                    transition-delay: 0.125s;
+                }
+            }
+
+            if sb_visibility=="webpage" {
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                    opacity: 0;
+                }
+
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):hover ytd-masthead {
+                    opacity: 1;
+                    transition-delay: 0.125s;
+                }
+            }
+        }
+
+        if sb_scrolling {
+            if transitiontype=="Slide" {
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container.ytd-app {
+                    animation: t_slide;
+                    animation-timeline: scroll(root);
+                    animation-range-start: 100vh, 0vh;
+                    animation-range-end: 100vh, 1vh;
+                    animation-fill-mode: both;
+                    overflow: hidden;
+                }
+            }
+
+            if transitiontype=="Fade" {
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container.ytd-app {
+                    animation: t_fade;
+                    animation-timeline: scroll(root);
+                    animation-range-start: 100vh, 0vh;
+                    animation-range-end: 100vh, 1vh;
+                    animation-fill-mode: both;
+                    overflow: hidden;
+                }
+            }
+
+            if transitiontype=="Both" {
+                ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container.ytd-app {
+                    animation: t_slidefade;
+                    animation-timeline: scroll(root);
+                    animation-range-start: 100vh, 0vh;
+                    animation-range-end: 100vh, 1vh;
+                    animation-fill-mode: both;
+                    overflow: hidden;
+                }
+            }
+
+            @keyframes dropchat {
+                from {
+                    --chattopmargin: 0px;
+                }
+                to {
+                    --chattopmargin: 56px;
+                }
+            }
+
+            ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy {
+                animation: dropchat transitionperiod ease-in-out;
+                animation-timeline: scroll(root);
+                animation-range-start: 100vh, 0vh;
+                animation-range-end: 100vh, 1vh;
+                animation-fill-mode: both;
+                margin-top: var(--chattopmargin);
+            }
+        }
+
+        if sb_visibility=="always" {
+            ytd-watch-flexy[theater]:not([fullscreen]) #full-bleed-container.ytd-watch-flexy {
+                height: calc(100vh - var(--ytd-watch-flexy-masthead-height)) !important;
+            }
+
+            ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #page-manager.ytd-app {
+                margin-top: var(--ytd-margin-14x) !important;
+            }
+
+            ytd-watch-flexy[theater]:not([fullscreen]):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy {
+                top: var(--ytd-watch-flexy-masthead-height) !important;
+            }
+        }
+
+        if sb_visibility=="hover" {
+            if b_transition {
+                if transitiontype=="Slide" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        transform: translateY(var(--mastheadpos, -56px));
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container:hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        transform: translateY(0px);
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+
+                if transitiontype=="Fade" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        opacity: var(--mastheadopacity, 0);
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container:hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        opacity: 1;
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+
+                if transitiontype=="Both" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        transform: translateY(var(--mastheadpos, -56px));
+                        opacity: var(--mastheadopacity, 0);
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container:hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        transform: translateY(0px);
+                        opacity: 1;
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+            }
+        }
+
+        if sb_visibility=="webpage" {
+            if b_transition {
+                if transitiontype=="Slide" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        transform: translateY(var(--mastheadpos, -56px));
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        transform: translateY(0px);
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+
+                if transitiontype=="Fade" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        opacity: var(--mastheadopacity, 0);
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        opacity: 1;
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+
+                if transitiontype=="Both" {
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) ytd-masthead {
+                        transform: translateY(var(--mastheadpos, -56px));
+                        opacity: var(--mastheadopacity, 0);
+                        transition: transitionperiod ease-in-out;
+                    }
+
+                    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):hover ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(tp-yt-iron-dropdown.ytd-popup-container:not([style*="display: none;"])) ytd-masthead,
+                    body:has(ytd-watch-flexy[theater]:not([fullscreen])):has(.gstl_50.sbdd_a:not([style*="display: none;"])) ytd-masthead {
+                        transform: translateY(0px);
+                        opacity: 1;
+                        transition: transitionperiod ease-in-out;
+                        transition-delay: 0.125s;
+                    }
+                }
+            }
+        }
+
+        if sb_visibility=="hide" {
+            ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container.ytd-app {
+                display: none !important;
+            }
+        }
+    }
+    else {
+        ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #masthead-container.ytd-app {
+            display: none !important;
+        }
+    }
+
+    /* Chat */
+    if ytchat {
+        if topchat {
+            ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy {
+                top: 0px;
+            }
+        }
+
+        if squarechat {
+            ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy {
+                border-radius: 0px !important;
+            }
+        }
+    }
+
+    /* Fix Search bar interaction with Chat */
+    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy:hover {
+        z-index: 3000 !important;
+        transition: z-index 125ms linear !important;
+        transition-delay: 125ms !important;
+    }
+
+    ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(#masthead-container.ytd-app:hover) #chat.ytd-watch-flexy {
+        z-index: 700 !important;
+    }
+
+    ytd-watch-flexy[theater]:not([fullscreen]) #show-hide-button.ytd-live-chat-frame {
+        margin-top: var(--ytd-margin-5x);
+    }
+
+    /* Extra Settings */
+    if extraconfig {
+        ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #chat.ytd-watch-flexy {
+            width: c_chat_width !important;
+        }
+
+        ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #masthead-container.ytd-app {
+            width: c_searchbar_width !important;
+        }
+
+        ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])):has(ytd-watch-flexy[fixed-panels]) #full-bleed-container.ytd-watch-flexy {
+            max-height: 4320px !important;
+            max-width: 7680px !important;
+            height: c_vp_height !important;
+            width: c_vp_width !important;
+        }
+    }
+
+    /* Scrollbar Style */
+    if scrollbarstyle {
+        if scrollbar_scrolling {
+            @keyframes a_scrollbar {
+                from {
+                    scrollbar-width: watch_scrollbar;
+                }
+                to {
+                    scrollbar-width: scrolling_scrollbar;
+                }
+            }
+
+            html:has(ytd-watch-flexy[theater]:not([fullscreen])) {
+                animation: a_scrollbar transitionperiod ease-in-out;
+                animation-timeline: scroll(root);
+                animation-range-start: 100vh, 0vh;
+                animation-range-end: 100vh, 1vh;
+                animation-fill-mode: both;
+            }
+        }
+
+        html:has(ytd-watch-flexy[theater]:not([fullscreen])) {
+            scrollbar-width: watch_scrollbar;
+        }
+    }
+}
+
+@-moz-document domain("youtube.com") {
+    if scrollbarstyle {
+        #item-scroller.yt-live-chat-item-list-renderer {
+            scrollbar-width: chat_scrollbar !important;
+        }
+    }
+}
