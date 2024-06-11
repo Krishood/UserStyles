@@ -22,23 +22,23 @@
 @var range transitionperiod             "└⟶ Transition Period" [0.25, 0, 1, 0.01, 's']
 
 @var checkbox scrollbarstyle            "⦿ Scrollbar Style" 1
-@var select watch_scrollbar "└⟶ Watch Page" {
+@var select watch_scrollbar             "└⟶ Watch Page" {
   "Broad": "auto",
   "Thin": "thin",
   "Hidden*": "none",
 }
-@var select chat_scrollbar "└⟶ Chat" {
+@var select chat_scrollbar              "└⟶ Chat" {
   "Broad": "auto",
   "Thin*": "thin",
   "Hidden": "none",
 }
-@var select scrolling_scrollbar "└⟶ While scrolling" {
+@var select scrolling_scrollbar         "└⟶ While scrolling" {
   "Broad": "auto",
   "Thin*": "thin",
   "Hidden": "none",
 }
 
-@var checkbox ytchat                   "⦿ Chat" 1
+@var checkbox ytchat                    "⦿ Chat" 1
 @var checkbox topchat                   "└⟶ Expand to top" 1
 @var checkbox squarechat                "└⟶ Square Corners" 1
 
@@ -48,8 +48,6 @@
 @var number c_vp_height                 "└⟶  Video Player Height (%)" [100, 0, 100, 0.1, 'vh']
 @var number c_vp_width                  "└⟶  Video Player width (%)" [100, 0, 200, 0.1, 'vw']
 
-@var color bgcolor                      "⦿ Video Player Background color" #000
-
 ==/UserStyle== */
 
 @-moz-document url-prefix("https://www.youtube.com/watch") {
@@ -58,7 +56,6 @@
     ytd-watch-flexy[theater]:not([fullscreen]) #full-bleed-container.ytd-watch-flexy {
         max-height: 100vh;
         height: 100vh;
-        background-color: bgcolor !important;
     }
     ytd-app:has(ytd-watch-flexy[theater]:not([fullscreen])) #page-manager.ytd-app {
         margin-top: 0px;
