@@ -3,7 +3,7 @@
 @name         Full-page Cinema Mode
 @description  Expands the video player further while in Cinema mode
 @namespace    https://userstyles.world/user/Krishood
-@version      1.1
+@version      1.2
 @author       Krishood
 @license      MIT
 
@@ -50,7 +50,8 @@
 
 ==/UserStyle== */
 
-@-moz-document url-prefix("https://www.youtube.com/watch") {
+@-moz-document url-prefix("https://www.youtube.com/watch?v="),
+regexp("^(?:.+[\.\/])?youtube\.com(?:[\/\#\?\&].+)?[\/\#\?]live$") {
     
     /* Expand Video Player */
     ytd-watch-flexy[theater]:not([fullscreen]) #full-bleed-container.ytd-watch-flexy {
